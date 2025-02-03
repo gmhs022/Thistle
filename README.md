@@ -1,3 +1,9 @@
+NOTICE:
+=
+This is an unofficial fork of the original, non-licensed mod designed to fix and update various elements.
+I do not claim ownership of the original mod and all credit should be given to
+gamax92 and the other original developers! If any of these parties wish me to remove this fork, please let me know!
+
 Thistle Computer
 ================
 
