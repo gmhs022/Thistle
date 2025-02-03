@@ -7,25 +7,25 @@ import org.apache.logging.log4j.message.SimpleMessage;
 
 public class LogMessage implements MessageFactory {
 
-	private String prefix;
+    private String prefix;
 
-	public LogMessage(String prefix) {
-		this.prefix = prefix;
-	}
+    public LogMessage(String prefix) {
+        this.prefix = prefix;
+    }
 
-	@Override
-	public Message newMessage(Object message) {
-		return new SimpleMessage("[" + prefix + "] " + message);
-	}
+    @Override
+    public Message newMessage(Object message) {
+        return new SimpleMessage("[" + prefix + "] " + message);
+    }
 
-	@Override
-	public Message newMessage(String message) {
-		return new SimpleMessage("[" + prefix + "] " + message);
-	}
+    @Override
+    public Message newMessage(String message) {
+        return new SimpleMessage("[" + prefix + "] " + message);
+    }
 
-	@Override
-	public Message newMessage(String message, Object... params) {
-		return new SimpleMessage("[" + prefix + "] " + new ParameterizedMessage(message, params).getFormattedMessage());
-	}
+    @Override
+    public Message newMessage(String message, Object... params) {
+        return new SimpleMessage("[" + prefix + "] " + new ParameterizedMessage(message, params).getFormattedMessage());
+    }
 
 }

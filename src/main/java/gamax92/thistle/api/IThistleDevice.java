@@ -4,9 +4,9 @@ import li.cil.oc.api.machine.Context;
 
 public interface IThistleDevice {
 
-	public int lengthThistle();
+    public int lengthThistle();
 
-	public int readThistle(Context context, int address);
+    public int readThistle(Context context, int address);
 
-	public void writeThistle(Context context, int address, int data);
+    public void writeThistle(Context context, int address, int data);
 }

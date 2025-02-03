@@ -6,118 +6,149 @@ import com.loomcom.symon.util.Utils;
  * A compact, struct-like representation of CPU state.
  */
 public class CpuState {
-	/**
-	 * Accumulator
-	 */
-	public int a;
 
-	/**
-	 * X index regsiter
-	 */
-	public int x;
+    /**
+     * Accumulator
+     */
+    public int a;
 
-	/**
-	 * Y index register
-	 */
-	public int y;
+    /**
+     * X index regsiter
+     */
+    public int x;
 
-	/**
-	 * Stack Pointer
-	 */
-	public int sp;
+    /**
+     * Y index register
+     */
+    public int y;
 
-	/**
-	 * Program Counter
-	 */
-	public int pc;
+    /**
+     * Stack Pointer
+     */
+    public int sp;
 
-	/**
-	 * Last Loaded Instruction Register
-	 */
-	public int ir;
+    /**
+     * Program Counter
+     */
+    public int pc;
 
-	/**
-	 * Last Loaded Instruction Arguments
-	 */
-	public int[] args = new int[2];
+    /**
+     * Last Loaded Instruction Register
+     */
+    public int ir;
 
-	public int instSize;
-	public boolean irqAsserted;
-	public boolean nmiAsserted;
-	public int lastPc;
+    /**
+     * Last Loaded Instruction Arguments
+     */
+    public int[] args = new int[2];
 
-	/* Status Flag Register bits */
-	public boolean carryFlag;
-	public boolean negativeFlag;
-	public boolean zeroFlag;
-	public boolean irqDisableFlag;
-	public boolean decimalModeFlag;
-	public boolean breakFlag;
-	public boolean overflowFlag;
+    public int instSize;
+    public boolean irqAsserted;
+    public boolean nmiAsserted;
+    public int lastPc;
 
-	// Processor lockup
-	public boolean dead = false;
+    /* Status Flag Register bits */
+    public boolean carryFlag;
+    public boolean negativeFlag;
+    public boolean zeroFlag;
+    public boolean irqDisableFlag;
+    public boolean decimalModeFlag;
+    public boolean breakFlag;
+    public boolean overflowFlag;
 
-	// Processor sleep
-	public boolean sleep = false;
+    // Processor lockup
+    public boolean dead = false;
 
-	/**
-	 * Returns a string formatted for the trace log.
-	 *
-	 * @return a string formatted for the trace log.
-	 */
-	public String toTraceEvent() {
-		String opcode = Cpu.disassembleOp(ir, args);
-		return getInstructionByteStatus() + "  " + String.format("%-14s", opcode) + "A:" + Utils.byteToHex(a) + " " + "X:" + Utils.byteToHex(x) + " " + "Y:" + Utils.byteToHex(y) + " " + "F:" + Utils.byteToHex(getStatusFlag()) + " " + "S:1" + Utils.byteToHex(sp) + " " + getProcessorStatusString();
-	}
+    // Processor sleep
+    public boolean sleep = false;
 
-	/**
-	 * @return The value of the Process Status Register, as a byte.
-	 */
-	public int getStatusFlag() {
-		int status = 0x20;
-		if (carryFlag) {
-			status |= Cpu.P_CARRY;
-		}
-		if (zeroFlag) {
-			status |= Cpu.P_ZERO;
-		}
-		if (irqDisableFlag) {
-			status |= Cpu.P_IRQ_DISABLE;
-		}
-		if (decimalModeFlag) {
-			status |= Cpu.P_DECIMAL;
-		}
-		if (breakFlag) {
-			status |= Cpu.P_BREAK;
-		}
-		if (overflowFlag) {
-			status |= Cpu.P_OVERFLOW;
-		}
-		if (negativeFlag) {
-			status |= Cpu.P_NEGATIVE;
-		}
-		return status;
-	}
+    /**
+     * Returns a string formatted for the trace log.
+     *
+     * @return a string formatted for the trace log.
+     */
+    public String toTraceEvent() {
+        String opcode = Cpu.disassembleOp(ir, args);
+        return getInstructionByteStatus() + "  "
+            + String.format("%-14s", opcode)
+            + "A:"
+            + Utils.byteToHex(a)
+            + " "
+            + "X:"
+            + Utils.byteToHex(x)
+            + " "
+            + "Y:"
+            + Utils.byteToHex(y)
+            + " "
+            + "F:"
+            + Utils.byteToHex(getStatusFlag())
+            + " "
+            + "S:1"
+            + Utils.byteToHex(sp)
+            + " "
+            + getProcessorStatusString();
+    }
 
-	public String getInstructionByteStatus() {
-		switch (InstructionTable.instructionModes[ir].getLength()) {
-		case 0:
-		case 1:
-			return Utils.wordToHex(lastPc) + "  " + Utils.byteToHex(ir) + "      ";
-		case 2:
-			return Utils.wordToHex(lastPc) + "  " + Utils.byteToHex(ir) + " " + Utils.byteToHex(args[0]) + "   ";
-		case 3:
-			return Utils.wordToHex(lastPc) + "  " + Utils.byteToHex(ir) + " " + Utils.byteToHex(args[0]) + " " + Utils.byteToHex(args[1]);
-		default:
-			return null;
-		}
-	}
+    /**
+     * @return The value of the Process Status Register, as a byte.
+     */
+    public int getStatusFlag() {
+        int status = 0x20;
+        if (carryFlag) {
+            status |= Cpu.P_CARRY;
+        }
+        if (zeroFlag) {
+            status |= Cpu.P_ZERO;
+        }
+        if (irqDisableFlag) {
+            status |= Cpu.P_IRQ_DISABLE;
+        }
+        if (decimalModeFlag) {
+            status |= Cpu.P_DECIMAL;
+        }
+        if (breakFlag) {
+            status |= Cpu.P_BREAK;
+        }
+        if (overflowFlag) {
+            status |= Cpu.P_OVERFLOW;
+        }
+        if (negativeFlag) {
+            status |= Cpu.P_NEGATIVE;
+        }
+        return status;
+    }
 
-	/**
-	 * @return A string representing the current status register state.
-	 */
-	public String getProcessorStatusString() {
-		return "[" + (negativeFlag ? 'N' : '.') + (overflowFlag ? 'V' : '.') + "-" + (breakFlag ? 'B' : '.') + (decimalModeFlag ? 'D' : '.') + (irqDisableFlag ? 'I' : '.') + (zeroFlag ? 'Z' : '.') + (carryFlag ? 'C' : '.') + "]";
-	}
+    public String getInstructionByteStatus() {
+        switch (InstructionTable.instructionModes[ir].getLength()) {
+            case 0:
+            case 1:
+                return Utils.wordToHex(lastPc) + "  " + Utils.byteToHex(ir) + "      ";
+            case 2:
+                return Utils.wordToHex(lastPc) + "  " + Utils.byteToHex(ir) + " " + Utils.byteToHex(args[0]) + "   ";
+            case 3:
+                return Utils.wordToHex(lastPc) + "  "
+                    + Utils.byteToHex(ir)
+                    + " "
+                    + Utils.byteToHex(args[0])
+                    + " "
+                    + Utils.byteToHex(args[1]);
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * @return A string representing the current status register state.
+     */
+    public String getProcessorStatusString() {
+        return "[" + (negativeFlag ? 'N' : '.')
+            + (overflowFlag ? 'V' : '.')
+            + "-"
+            + (breakFlag ? 'B' : '.')
+            + (decimalModeFlag ? 'D' : '.')
+            + (irqDisableFlag ? 'I' : '.')
+            + (zeroFlag ? 'Z' : '.')
+            + (carryFlag ? 'C' : '.')
+            + "]";
+    }
 }

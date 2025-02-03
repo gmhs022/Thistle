@@ -2,6 +2,9 @@ package gamax92.thistle;
 
 import java.io.IOException;
 import java.io.InputStream;
+
+import net.minecraftforge.common.config.Configuration;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,57 +16,63 @@ import gamax92.thistle.util.LogMessage;
 import li.cil.oc.Settings;
 import li.cil.oc.api.Items;
 import li.cil.oc.api.Machine;
-import net.minecraftforge.common.config.Configuration;
 
-@Mod(modid = Thistle.MODID, name = Thistle.NAME, version = Thistle.VERSION, dependencies = "required-after:OpenComputers@[1.7.0,)")
+@Mod(
+    modid = Thistle.MODID,
+    name = Thistle.NAME,
+    version = Tags.VERSION,
+    acceptedMinecraftVersions = "[1.7.10]",
+    dependencies = "required-after:OpenComputers@[1.7.0,)")
 public class Thistle {
-	public static final String MODID = "thistle";
-	public static final String NAME = "Thistle Computer";
-	public static final String VERSION = "1.1.1";
 
-	@Mod.Instance
-	public static Thistle instance;
+    public static final String MODID = "thistle";
+    public static final String NAME = "Thistle Computer";
 
-	public static Logger log;
-	private Configuration config;
+    @Mod.Instance
+    public static Thistle instance;
 
-	@Mod.EventHandler
-	public void preInit(FMLPreInitializationEvent event) {
-		log = LogManager.getLogger(this.MODID, new LogMessage("Thistle"));
-		config = new Configuration(event.getSuggestedConfigurationFile());
+    public static Logger log;
+    private Configuration config;
 
-		ThistleConfig.loadConfig(config);
-		Machine.add(ThistleArchitecture.class);
-	}
+    @Mod.EventHandler
+    public void preInit(FMLPreInitializationEvent event) {
+        log = LogManager.getLogger(this.MODID, new LogMessage("Thistle"));
+        config = new Configuration(event.getSuggestedConfigurationFile());
 
-	@Mod.EventHandler
-	public void init(FMLInitializationEvent event) {
-		boolean configurationIssue = false;
-		if (Settings.get().eepromSize() != 4096) {
-			configurationIssue = true;
-			log.error("EEPROM size is no longer 4096 bytes, Thistle will not work properly.");
-		}
-		if (Settings.get().eepromDataSize() != 256) {
-			configurationIssue = true;
-			log.error("EEPROM data size is no longer 256 bytes, Thistle will not work properly.");
-		}
-		if (configurationIssue)
-			log.error("Please reconfigure OpenComputers or you will run into issues.");
+        ThistleConfig.loadConfig(config);
+        Machine.add(ThistleArchitecture.class);
+    }
 
-		// Register EEPROM
-		InputStream romImage = this.getClass().getResourceAsStream("/assets/" + MODID + "/roms/boot.rom");
-		if (romImage != null) {
-			try {
-				byte[] code = IOUtils.toByteArray(romImage);
-				Items.registerEEPROM("EEPROM (Thistle)", code, null, false);
-			} catch (IOException e) {
-				log.warn("Failed reading boot.rom, no custom EEPROMs available");
-				e.printStackTrace();
-			} finally {
-				IOUtils.closeQuietly(romImage);
-			}
-		} else {
-			log.warn("boot.rom could not be located, no custom EEPROMs available");
-		}
-	}
+    @Mod.EventHandler
+    public void init(FMLInitializationEvent event) {
+        boolean configurationIssue = false;
+        if (Settings.get()
+            .eepromSize() != 4096) {
+            configurationIssue = true;
+            log.error("EEPROM size is no longer 4096 bytes, Thistle will not work properly.");
+        }
+        if (Settings.get()
+            .eepromDataSize() != 256) {
+            configurationIssue = true;
+            log.error("EEPROM data size is no longer 256 bytes, Thistle will not work properly.");
+        }
+        if (configurationIssue) log.error("Please reconfigure OpenComputers or you will run into issues.");
+
+        // Register EEPROM
+        InputStream romImage = this.getClass()
+            .getResourceAsStream("/assets/" + MODID + "/roms/boot.rom");
+        if (romImage != null) {
+            try {
+                byte[] code = IOUtils.toByteArray(romImage);
+                Items.registerEEPROM("EEPROM (Thistle)", code, null, false);
+            } catch (IOException e) {
+                log.warn("Failed reading boot.rom, no custom EEPROMs available");
+                e.printStackTrace();
+            } finally {
+                IOUtils.closeQuietly(romImage);
+            }
+        } else {
+            log.warn("boot.rom could not be located, no custom EEPROMs available");
+        }
+    }
 }
