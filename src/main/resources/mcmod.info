@@ -1,16 +1,21 @@
-[
 {
-  "modid": "thistle",
-  "name": "Thistle Computer",
-  "description": "65C02 Architecture for OpenComputers.",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
-  "url": "",
-  "updateUrl": "",
-  "authorList": ["gamax92"],
-  "credits": "Seth J. Morabito for creating Symon",
-  "logoFile": "",
-  "screenshots": [],
-  "dependencies": []
+	"modListVersion": 2,
+	"modList": [{
+		"modid": "${modId}",
+		"name": "${modName}",
+		"description": "65C02 Architecture for OpenComputers.",
+		"version": "${modVersion}",
+		"mcversion": "${minecraftVersion}",
+		"url": "",
+		"updateUrl": "",
+		"authorList": ["gamax92"],
+		"credits": "Seth J. Morabito for creating Symon",
+		"logoFile": "",
+		"screenshots": [],
+		"parent": "",
+		"requiredMods": [],
+		"dependencies": [],
+		"dependants": [],
+		"useDependencyInformation": false
+	}]
 }
-]

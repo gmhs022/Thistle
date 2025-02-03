@@ -403,7 +403,7 @@ public class ConsoleDriver {
                                 new Object[] { colors[(this.brightFG ? 8 : 0) + this.textFG] });
                             break;
                         case -6:
-                            machine.invoke(gpuADDR, "fill", new Object[] { 1, 1, this.W, this.H, ' ' });
+                            machine.invoke(gpuADDR, "fill", new Object[] { 1, 1, this.W, this.H, " " });
                             setup = false;
                             break;
 
@@ -412,53 +412,53 @@ public class ConsoleDriver {
                             chained.add(-401);
                             break;
                         case -401: // Scroll Left 2. Fill
-                            machine.invoke(gpuADDR, "fill", new Object[] { 1, 1, 1, this.H, ' ' });
+                            machine.invoke(gpuADDR, "fill", new Object[] { 1, 1, 1, this.H, " " });
                             break;
                         case -410: // Scroll Right 1. Move
                             machine.invoke(gpuADDR, "copy", new Object[] { 1, 1, this.W, this.H, -1, 0 });
                             chained.add(-411);
                             break;
                         case -411: // Scroll Right 2. Fill
-                            machine.invoke(gpuADDR, "fill", new Object[] { this.W, 1, 1, this.H, ' ' });
+                            machine.invoke(gpuADDR, "fill", new Object[] { this.W, 1, 1, this.H, " " });
                             break;
                         case -420: // Scroll Up 1. Move
                             machine.invoke(gpuADDR, "copy", new Object[] { 1, 1, this.W, this.H, 0, 1 });
                             chained.add(-421);
                             break;
                         case -421: // Scroll Up 2. Fill
-                            machine.invoke(gpuADDR, "fill", new Object[] { 1, 1, this.W, 1, ' ' });
+                            machine.invoke(gpuADDR, "fill", new Object[] { 1, 1, this.W, 1, " " });
                             break;
                         case -430: // Scroll Down 1. Move
                             machine.invoke(gpuADDR, "copy", new Object[] { 1, 1, this.W, this.H, 0, -1 });
                             chained.add(-431);
                             break;
                         case -431: // Scroll Down 2. Fill
-                            machine.invoke(gpuADDR, "fill", new Object[] { 1, this.H, this.W, 1, ' ' });
+                            machine.invoke(gpuADDR, "fill", new Object[] { 1, this.H, this.W, 1, " " });
                             break;
 
                         case -500: // ANSI 0J
                             if (this.Y < this.H) machine.invoke(
                                 gpuADDR,
                                 "fill",
-                                new Object[] { this.X, this.Y + 1, this.W, (this.H - this.Y), ' ' });
+                                new Object[] { this.X, this.Y + 1, this.W, (this.H - this.Y), " " });
                             chained.add(-502);
                             break;
                         case -501: // ANSI 1J
                             if (this.Y > 1)
-                                machine.invoke(gpuADDR, "fill", new Object[] { 1, 1, this.W, this.Y - 1, ' ' });
+                                machine.invoke(gpuADDR, "fill", new Object[] { 1, 1, this.W, this.Y - 1, " " });
                             chained.add(-503);
                             break;
                         case -502: // ANSI 0K
                             machine.invoke(
                                 gpuADDR,
                                 "fill",
-                                new Object[] { this.X, this.Y, (this.W - this.X + 1), 1, ' ' });
+                                new Object[] { this.X, this.Y, (this.W - this.X + 1), 1, " " });
                             break;
                         case -503: // ANSI 1K
-                            machine.invoke(gpuADDR, "fill", new Object[] { 1, this.Y, this.X, 1, ' ' });
+                            machine.invoke(gpuADDR, "fill", new Object[] { 1, this.Y, this.X, 1, " " });
                             break;
                         case -504: // ANSI 2K
-                            machine.invoke(gpuADDR, "fill", new Object[] { 1, this.Y, this.W, 1, ' ' });
+                            machine.invoke(gpuADDR, "fill", new Object[] { 1, this.Y, this.W, 1, " " });
                             break;
                         case -505: // ANSI ?25h (Cursor Enable)
                             showCursor = true;
@@ -544,7 +544,7 @@ public class ConsoleDriver {
                                 if (dY > 1) dY = dY - 1;
                                 else dX = 1;
                             }
-                            machine.invoke(gpuADDR, "set", new Object[] { dX, dY, ' ' });
+                            machine.invoke(gpuADDR, "set", new Object[] { dX, dY, " " });
                             this.X = dX;
                             this.Y = dY;
                             break;
