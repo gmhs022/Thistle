@@ -2,7 +2,10 @@
 
 repositories {
 	maven {
-        name = "OC repo"
-        url = "http://maven.cil.li/"
+		url = uri("https://maven.pkg.github.com/MightyPirates/OpenComputers")
+		credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+            password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+        }
     }
 }
