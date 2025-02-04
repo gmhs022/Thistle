@@ -221,8 +221,8 @@ public class GeneralIO extends Device {
             .getMachine()
             .getCpu();
         if (name.equals("key_down")) {
-            int character = ((Double) args[1]).intValue();
-            int lwjglcode = ((Double) args[2]).intValue();
+            int character = ((Integer) args[1]);
+            int lwjglcode = ((Integer) args[2]);
 
             // Fix various key issues
             if (lwjglcode == Keyboard.KEY_BACK) // Normalize Backspace

@@ -53,7 +53,7 @@ public class ConsoleDriver {
     private long lastTime = System.currentTimeMillis();
     private int cursorFG;
     private int cursorBG;
-    private char cursorChar;
+    private String cursorChar;
 
     private double[] colors = { 0x000000, 0xFF3333, 0x336600, 0x663300, 0x333399, 0x9933CC, 0x336699, 0xCCCCCC,
         0x333333, 0xFF6699, 0x33CC33, 0xFFFF33, 0x6699FF, 0xCC66CC, 0xFFCC33, 0xFFFFFF };
@@ -499,7 +499,7 @@ public class ConsoleDriver {
 
                         case -1001: // Cursor 1. GET
                             Object[] response2 = machine.invoke(gpuADDR, "get", new Object[] { this.X, this.Y });
-                            this.cursorChar = (Character) response2[0];
+                            this.cursorChar = (String) response2[0];
                             this.cursorFG = (Integer) response2[2];
                             this.cursorBG = (Integer) response2[1];
                             chained.add(-1002);
@@ -513,10 +513,7 @@ public class ConsoleDriver {
                             chained.add(-1004);
                             break;
                         case -1004: // Cursor 4. Set Character
-                            machine.invoke(
-                                gpuADDR,
-                                "set",
-                                new Object[] { this.X, this.Y, Character.toString(this.cursorChar) });
+                            machine.invoke(gpuADDR, "set", new Object[] { this.X, this.Y, this.cursorChar });
                             this.cursor = !this.cursor;
                             if (!this.cursor) {
                                 if (this.cursorBG != colors[(this.brightBG ? 8 : 0) + this.textBG]) chained.add(-4);
