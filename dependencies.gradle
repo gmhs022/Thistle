@@ -35,5 +35,5 @@
  */
 dependencies {
     runtimeOnlyNonPublishable("com.github.GTNewHorizons:NotEnoughItems:2.7.4-GTNH:dev")
-	implementation("li.cil.oc:OpenComputers:MC1.7.10-1.7.+:dev")
+	implementation("li.cil.oc:opencomputers-1.7.10-forge:1.8.7:dev")
 }
